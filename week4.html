@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>week4</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat+Alternates:wght@400;700&family=Numans&display=swap" rel="stylesheet">
+
+  <style>
+    body{
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background: #ffffff;
+      font-family: "Montserrat Alternates", sans-serif;
+    }
+
+    .back {
+      position: fixed;
+      top: 24px;
+      left: 24px;
+      font-size: 16px;
+      font-family: 'Numans', sans-serif;
+      color: #666;
+      text-decoration: none;
+      z-index: 20;
+    }
+
+    .hidden{
+      display: none !important;
+    }
+
+    .center-wrap{
+      display: flex;
+      flex-direction: column;
+      align-items: center;   
+    }
+
+    h1{
+      font-size: 18px;
+      margin-bottom: 60px;
+      font-weight: 700;
+      text-align: center;
+      text-transform: lowercase;
+    }
+
+    .teabag-row{
+      display: flex;
+      gap: 120px;
+    }
+
+    .teabag-btn{
+      cursor: pointer;
+      transition: transform 0.08s ease;
+      border: none;
+      background: transparent;
+      padding: 0;
+    }
+
+    .teabag-btn:active{
+      transform: scale(0.97);
+    }
+
+    .teabag-btn img{
+      width: 150px;
+      height: auto;
+      display:block;
+    }
+
+    .card-wrap{
+      width: 100%;
+      display: flex;
+      justify-content: center;
+    }
+
+    .tea-card{
+      position: relative;
+      max-width: 900px;
+      width: 90vw;
+      padding: 60px 80px;
+      background: #C9D282;
+      color: #703D3C;
+      border-radius: 0;
+    }
+
+    .card-back-btn{
+      position: absolute;
+      top: 24px;
+      left: 24px;
+      cursor: pointer;
+    }
+    .card-back-btn img{
+      width: 32px;
+      height: auto;
+    }
+
+    .card-cup{
+      position: absolute;
+      right: 32px;
+      bottom: 24px;
+    }
+    .card-cup img{
+      width: 36px;
+      height:auto;
+    }
+
+    .tea-title{
+      margin: 0 0 32px;
+      text-align: center;
+      font-size: 32px;
+      font-weight:700;
+    }
+
+    .tea-list{
+      list-style:none;
+      padding:0;
+      margin:0 0 20px;
+      text-align:center;
+      font-size:14px;
+      line-height:1.5;
+      font-weight:700;  
+    }
+    .tea-list li + li{
+      margin-top:4px;
+    }
+
+    .tea-summary{
+      margin:0;
+      text-align:center;
+      font-size:14px;
+      font-weight:700; 
+    }
+
+    @media (max-width:768px){
+      .tea-card{
+        padding:50px 24px 56px;
+      }
+      .tea-title{
+        font-size:26px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <a href="../collection.html" class="back">< back</a>
+
+  <div id="screen-teabags" class="center-wrap">
+    <h1>click a tea bag for today’s recommendation</h1>
+
+    <div class="teabag-row">
+      <button class="teabag-btn" data-tea="chamomile">
+        <img src="tea1.png" alt="tea 1">
+      </button>
+      <button class="teabag-btn" data-tea="lavender">
+        <img src="tea2.png" alt="tea 2">
+      </button>
+      <button class="teabag-btn" data-tea="lemon">
+        <img src="tea3.png" alt="tea 3">
+      </button>
+    </div>
+  </div>
+
+  <div id="screen-card" class="hidden">
+    <div class="card-wrap">
+      <div id="tea-card" class="tea-card">
+
+        <div id="card-back" class="card-back-btn">
+          <img src="arrow.png" alt="back">
+        </div>
+
+        <div class="card-cup">
+          <img src="cup.png" alt="cup">
+        </div>
+
+        <h2 id="tea-title" class="tea-title">Chamomile Tea</h2>
+
+        <ul id="tea-list" class="tea-list">
+          <li>calms the mind and reduces tension</li>
+          <li>helps ease anxiety and supports better sleep</li>
+          <li>warm, gentle flavor brings emotional comfort</li>
+        </ul>
+
+        <p id="tea-summary" class="tea-summary">
+          A classic herbal tea for soothing and relaxing the mind
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const TEAS = {
+      chamomile:{
+        bg:"#C9D282",
+        title:"Chamomile Tea",
+        lines:[
+          "calms the mind and reduces tension",
+          "helps ease anxiety and supports better sleep",
+          "warm, gentle flavor brings emotional comfort"
+        ],
+        summary:"A classic herbal tea for soothing and relaxing the mind"
+      },
+      lavender:{
+        bg:"#C4D4F1",
+        title:"Lavender Tea",
+        lines:[
+          "reduces stress and promotes a lighter mood",
+          "helps ease feelings of restlessness",
+          "supports relaxation without making you sleepy"
+        ],
+        summary:"A refreshing tea that gently melts away stress"
+      },
+      lemon:{
+        bg:"#DDBFD9",
+        title:"Lemon Balm Tea",
+        lines:[
+          "reduces stress and promotes a lighter mood",
+          "helps ease feelings of restlessness",
+          "supports relaxation without making you sleepy"
+        ],
+        summary:"A refreshing tea that gently melts away stress"
+      }
+    };
+
+    const screenTeabags = document.getElementById("screen-teabags");
+    const screenCard    = document.getElementById("screen-card");
+
+    const cardEl    = document.getElementById("tea-card");
+    const titleEl   = document.getElementById("tea-title");
+    const listEl    = document.getElementById("tea-list");
+    const summaryEl = document.getElementById("tea-summary");
+    const backBtn   = document.getElementById("card-back");
+
+    document.querySelectorAll(".teabag-btn").forEach(btn=>{
+      btn.addEventListener("click", ()=>{
+        const key  = btn.dataset.tea;
+        const data = TEAS[key];
+        if(!data) return;
+
+        cardEl.style.background = data.bg;
+        titleEl.textContent     = data.title;
+
+        listEl.innerHTML = "";
+        data.lines.forEach(line=>{
+          const li = document.createElement("li");
+          li.textContent = line;
+          listEl.appendChild(li);
+        });
+
+        summaryEl.textContent = data.summary;
+
+        screenTeabags.classList.add("hidden");
+        screenCard.classList.remove("hidden");
+      });
+    });
+
+    backBtn.addEventListener("click", ()=>{
+      screenCard.classList.add("hidden");
+      screenTeabags.classList.remove("hidden");
+    });
+  </script>
+
+</body>
+</html>
